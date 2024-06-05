@@ -1,11 +1,8 @@
-// Write your code at relevant places in the code below:
-
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
-import { useEffect, useReducer } from "react";
 
 const emailReducer = (state, action) => {
   if (action.type === "USER_INPUT") {
@@ -26,11 +23,11 @@ const emailReducer = (state, action) => {
 const passwordReducer = (state, action) => {
   if (action.type === "USER_INPUT") {
     return {
-      value: action.payLoad,
-      isValid: action.payLoad && action.payLoad.trim().length > 6,
+      value: action.payload,
+      isValid: action.payload && action.payload.trim().length > 6,
     };
   }
-  if (action.type === "USER_BLUR") {
+  if (action.type === "INPUT_BLUR") {
     return {
       value: state.value,
       isValid: state.value && state.value.trim().length > 6,
@@ -74,7 +71,9 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, passwordState.value);
+    if (emailState.isValid && passwordState.isValid) {
+      props.onLogin(emailState.value, passwordState.value);
+    }
   };
 
   return (
